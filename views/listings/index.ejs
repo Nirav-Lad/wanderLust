@@ -1,0 +1,123 @@
+<% layout('/layouts/boilerplate') -%>
+<style>
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 0.8rem;
+    }
+
+    .filter {
+        text-align: center;
+        opacity: 0.7;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .filter:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .tax-toggle {
+        border: 1px solid black;
+        border-radius: 1rem;
+        height: 3.15rem;
+        padding: 1rem;
+        margin-left: 6.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .tax-info,
+    .tax-total {
+        display: none;
+    }
+
+    .tax-total {
+        display: none; /* Ensure it takes a new line */
+        font-style: italic;
+        color: #131212; /* Optional: style to differentiate from other text */
+    }
+</style>
+<body>
+    <div class="filters">
+        <div class="filter">
+            <div><i class="fa-solid fa-fire-flame-curved"></i></div>
+            <p>Trending</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-tree-city"></i></div>
+            <p>Iconic cities</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Mountains</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing pools</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-chess-rook"></i></div>
+            <p>Castles</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Boats</p>
+        </div>
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                <label class="form-check-label" for="switchCheckDefault">Show total after taxes</label>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1">
+        <% for (let listing of allListings) { %>
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="card listing-card" style="width: 20rem;">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image" style="height: 20rem;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%= listing.title %></b><br>
+                            <%= listing.price.toLocaleString("en-IN", { style: "currency", currency: "INR" }) %> /night
+                        </p>
+                        <i class="tax-info">+18% GST</i>
+                        <i class="tax-total">Total: <%= (listing.price * 1.18).toLocaleString("en-IN", { style: "currency", currency: "INR" }) %> /night</i>
+                    </div>
+                </div>
+            </a>
+        <% } %>
+    </div>
+
+    <script>
+        let taxSwitch = document.getElementById("switchCheckDefault");
+        taxSwitch.addEventListener("click", () => {
+            let taxInfo = document.getElementsByClassName("tax-info");
+            let taxTotal = document.getElementsByClassName("tax-total");
+            for (let info of taxInfo) {
+                info.style.display = taxSwitch.checked ? "inline" : "none";
+            }
+            for (let total of taxTotal) {
+                total.style.display = taxSwitch.checked ? "block" : "none";
+            }
+        });
+    </script>
+</body>
